@@ -1,0 +1,114 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Resources:
+  RegistrationTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: RegistrationData
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+
+  BotHandlerFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ../lambda/
+      Handler: bot-handler.lambda_handler
+      Runtime: python3.9
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref RegistrationTable
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref RegistrationTable
+
+  ApiGatewayFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ../lambda/
+      Handler: api-gateway-handler.lambda_handler
+      Runtime: python3.9
+      Environment:
+        Variables:
+          BOT_ID: !Ref RegistrationBot
+      Events:
+        ChatApi:
+          Type: Api
+          Properties:
+            Path: /api/chat
+            Method: post
+            Cors:
+              AllowMethods: "'POST,OPTIONS'"
+              AllowHeaders: "'Content-Type'"
+              AllowOrigin: "'*'"
+
+  WhatsAppHandlerFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ../lambda/
+      Handler: whatsapp-handler.lambda_handler
+      Runtime: python3.9
+      Events:
+        WhatsAppWebhook:
+          Type: Api
+          Properties:
+            Path: /webhook
+            Method: post
+
+  RegistrationBot:
+    Type: AWS::Lex::Bot
+    Properties:
+      Name: RegistrationBot
+      RoleArn: !GetAtt LexRole.Arn
+      DataPrivacy:
+        ChildDirected: false
+      IdleSessionTTLInSeconds: 300
+      BotLocales:
+        - LocaleId: en_US
+          NluConfidenceThreshold: 0.40
+          Intents:
+            - IntentName: CourseEnrollment
+              SampleUtterances:
+                - Utterance: "I want to enroll in a course"
+                - Utterance: "Course enrollment"
+              Slots:
+                - SlotName: studentId
+                  SlotTypeName: AMAZON.AlphaNumeric
+                - SlotName: courseCode
+                  SlotTypeName: AMAZON.AlphaNumeric
+            - IntentName: StudentAdmission
+              SampleUtterances:
+                - Utterance: "I want to apply for admission"
+              Slots:
+                - SlotName: applicantName
+                  SlotTypeName: AMAZON.FirstName
+
+  LexRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lexv2.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: LexLambdaPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - lambda:InvokeFunction
+                Resource: !GetAtt BotHandlerFunction.Arn
+
+Outputs:
+  ApiUrl:
+    Description: API Gateway URL
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod"
