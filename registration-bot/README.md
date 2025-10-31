@@ -28,5 +28,5 @@
 - `whatsapp-loan-demo-lex-chat` - Web chat handler with real-time status updates
 - `edubot-whatsapp-handler` - WhatsApp integration with status lookup
 
-## Website URL
-https://wqgugyg29d.execute-api.us-east-1.amazonaws.com/demo/login
+## Deployment
+The system is deployed on AWS with API Gateway endpoints for web interface and chat functionality.
