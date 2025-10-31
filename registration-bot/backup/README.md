@@ -15,7 +15,7 @@ This folder contains backup copies of all EduBot University files.
 - `edubot_frontend.py` - First deployment attempt
 
 ## Current Live System
-- **URL:** https://wqgugyg29d.execute-api.us-east-1.amazonaws.com/demo/login
+- **URL:** [Deployed on AWS API Gateway]
 - **Lambda Function:** whatsapp-loan-demo-login
 - **Handler:** edubot_fixed.lambda_handler
 - **Features:** Login/Register + Protected Chatbot + Lex Integration
@@ -27,5 +27,5 @@ This folder contains backup copies of all EduBot University files.
 
 ## Notes
 - Local server no longer needed - everything runs on AWS
-- Chat API: https://wqgugyg29d.execute-api.us-east-1.amazonaws.com/demo/chat
+- Chat API: [AWS API Gateway Endpoint]
 - All CSS/JS embedded in Lambda for reliability

@@ -1027,7 +1027,7 @@ async function login() {
         console.log('Making login request...', {studentId, passwordLength: password.length});
         
         // Call backend to validate user credentials
-        const response = await fetch('https://wqgugyg29d.execute-api.us-east-1.amazonaws.com/demo/login', {
+        const response = await fetch('/demo/login', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
@@ -1099,7 +1099,7 @@ async function register() {
     
     try {
         // Call backend to register user
-        const response = await fetch('https://wqgugyg29d.execute-api.us-east-1.amazonaws.com/demo/login', {
+        const response = await fetch('/demo/login', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
@@ -1217,7 +1217,7 @@ async function uploadDocument(file, message) {
         console.log('File converted, size:', fileData.length);
         
         console.log('Making upload request...');
-        const response = await fetch('https://wqgugyg29d.execute-api.us-east-1.amazonaws.com/demo/chat', {
+        const response = await fetch('/demo/chat', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -1295,7 +1295,7 @@ function quickAction(action) {
 
 async function simulateBotResponse(message) {
     try {
-        const response = await fetch('https://wqgugyg29d.execute-api.us-east-1.amazonaws.com/demo/chat', {
+        const response = await fetch('/demo/chat', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
