@@ -30,4 +30,3 @@
 
 ## Website URL
 https://wqgugyg29d.execute-api.us-east-1.amazonaws.com/demo/login
-Updated WhatsApp handler with working Lex + Bedrock + Textract integration
