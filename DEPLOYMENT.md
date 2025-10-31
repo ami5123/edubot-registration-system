@@ -48,5 +48,4 @@ BEDROCK_MODEL_ID=anthropic.claude-3-haiku-20240307-v1:0
 S3_BUCKET_NAME=your-document-bucket
 ```
 
-## Live Demo
-https://wqgugyg29d.execute-api.us-east-1.amazonaws.com/demo/login
+
